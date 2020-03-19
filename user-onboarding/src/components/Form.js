@@ -35,7 +35,8 @@ const FormikUserForm = withFormik({
       email: props.email || "",
       role: props.role || "",
       password: props.password || "",
-      tos: props.tos || false
+      tos: props.tos || false,
+      id: props.id || Date.now()
     };
   },
 
@@ -61,11 +62,16 @@ const FormikUserForm = withFormik({
     console.log(values);
 
     axios.post('https://reqres.in/api/users', values)
-      .then(response=>console.log(response))
+      .then(response=>{
+        console.log(response);
+        formikBag.props.addFunction(values);
+      })
       .catch(error=>console.log(error));
 
     formikBag.setStatus("Form Submitting!");
     formikBag.resetForm();
+
+
 
     //THIS IS WHERE YOU DO YOUR FORM SUBMISSION CODE... HTTP REQUESTS, ETC.
   }

@@ -6,6 +6,24 @@ import axios from 'axios';
 
 const roles = ['Front-End','Back-End','DB Manager','UX Designer'];
 
+const FormDiv = styled.div`
+  label {
+    margin: 10px 0px;
+
+    &:after {
+      content: ': ';
+    }
+  }
+
+  .check:after {
+    content: '';
+  }
+
+  input {
+    margin: 5px 0px;
+  }
+`;
+
 const Error = styled.p`
   color: red;
   font-size: 0.6rem;
@@ -26,16 +44,18 @@ function UserForm(props) {
 
   return (
     <Form>
-      <label htmlFor="uname">Name: </label><Field type="text" name="uname" placeholder="Name" /><br />
-      {props.touched.uname && props.errors.uname?<Error>{props.errors.uname}</Error>:<></>}
-      <label htmlFor="email">Email: </label><Field type="email" name="email" placeholder="Email" /><br />
-      {props.touched.email && props.errors.email?<Error>{props.errors.email}</Error>:<></>}
-      <label htmlFor="password">Password: </label><Field type="password" name="password" placeholder="Password" /><br />
-      {props.touched.password && props.errors.password?<Error>{props.errors.password}</Error>:<></>}
-      <label htmlFor="tos">Do you agree to the Terms of Service? </label><Field type="checkbox" name="tos" /><br />
-      {props.errors.tos?<Error>{props.errors.tos}</Error>:<></>}
-      <Field type="hidden" name="id" />
-      <button disabled={!props.isValid}>Submit</button>
+      <FormDiv>
+        <label htmlFor="uname">Name</label><Field type="text" name="uname" placeholder="Name" /><br />
+        {props.touched.uname && props.errors.uname?<Error>{props.errors.uname}</Error>:<></>}
+        <label htmlFor="email">Email</label><Field type="email" name="email" placeholder="Email" /><br />
+        {props.touched.email && props.errors.email?<Error>{props.errors.email}</Error>:<></>}
+        <label htmlFor="password">Password</label><Field type="password" name="password" placeholder="Password" /><br />
+        {props.touched.password && props.errors.password?<Error>{props.errors.password}</Error>:<></>}
+        <label htmlFor="tos" className="check">Do you agree to the Terms of Service? </label><Field type="checkbox" name="tos" /><br />
+        {props.errors.tos?<Error>{props.errors.tos}</Error>:<></>}
+        <Field type="hidden" name="id" />
+        <button disabled={!props.isValid}>Submit</button>
+      </FormDiv>
     </Form>
   );
 }

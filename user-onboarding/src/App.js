@@ -9,6 +9,10 @@ import axios from 'axios';
 const AppDiv = styled.div`
   padding: 20px;
   text-align: center;
+
+  h1, h2 {
+    color: darkblue;
+  }
 `;
 
 function App() {
@@ -66,7 +70,7 @@ function App() {
     <AppDiv>
       <h1>User System</h1>
       {isEditing?<Form addFunction={addUser} {...userToEdit} isEditing={isEditing} currentId={userToEdit.id} />:<Form addFunction={addUser} isEditing={isEditing} currentId={currentId} />}
-      <h2>Users</h2>
+      {users.length>0?<h2>Users</h2>:<></>}
       {users.map(user=><UserCard user={user} key={user.id} editFunction={editUser} />)}
     </AppDiv>
   );

@@ -8,6 +8,7 @@ const UCard = styled.div`
 
   h3 {
     margin: 25px;
+    color: darkblue;
   }
   p {
     margin: 25px

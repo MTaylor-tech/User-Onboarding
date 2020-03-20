@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import styled from 'styled-components';
@@ -13,6 +13,17 @@ const Error = styled.p`
 `;
 
 function UserForm(props) {
+  useEffect(()=>{
+    if (props.isEditing) {
+      console.log(props);
+      props.setFieldValue('uname',props.uname);
+      props.setFieldValue('email',props.email);
+      props.setFieldValue('password',props.password);
+      props.setFieldValue('tos',props.tos);
+      props.setFieldValue('id',props.id);
+    }
+  },[props.isEditing]);
+
   return (
     <Form>
       <label htmlFor="uname">Name: </label><Field type="text" name="uname" placeholder="Name" /><br />
@@ -23,6 +34,7 @@ function UserForm(props) {
       {props.touched.password && props.errors.password?<Error>{props.errors.password}</Error>:<></>}
       <label htmlFor="tos">Do you agree to the Terms of Service? </label><Field type="checkbox" name="tos" /><br />
       {props.errors.tos?<Error>{props.errors.tos}</Error>:<></>}
+      <Field type="hidden" name="id" />
       <button disabled={!props.isValid}>Submit</button>
     </Form>
   );
@@ -36,9 +48,10 @@ const FormikUserForm = withFormik({
       role: props.role || "",
       password: props.password || "",
       tos: props.tos || false,
-      id: props.id || Date.now()
+      id: props.id || (props.currentId+1)
     };
   },
+  //id still gives same id... will need to find another way if going to edit
 
   //======VALIDATION SCHEMA==========
   validationSchema: Yup.object().shape({
@@ -60,13 +73,8 @@ const FormikUserForm = withFormik({
 
   handleSubmit(values, formikBag) {
     console.log(values);
-
-    axios.post('https://reqres.in/api/users', values)
-      .then(response=>{
-        console.log(response);
-        formikBag.props.addFunction(values);
-      })
-      .catch(error=>console.log(error));
+    const userToSave = {...values, id: formikBag.props.currentId};
+    formikBag.props.addFunction(userToSave);
 
     formikBag.setStatus("Form Submitting!");
     formikBag.resetForm();
